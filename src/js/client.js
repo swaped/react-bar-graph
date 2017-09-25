@@ -1,80 +1,54 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryStack } from 'victory';
 
-const data2012 = [
-  {quarter: 1, earnings: 13000},
-  {quarter: 2, earnings: 16500},
-  {quarter: 3, earnings: 14250},
-  {quarter: 4, earnings: 19000}
-];
+import { VictoryBar, VictoryChart, VictoryAxis, VictoryTooltip } from 'victory';
 
-const data2013 = [
-  {quarter: 1, earnings: 15000},
-  {quarter: 2, earnings: 12500},
-  {quarter: 3, earnings: 19500},
-  {quarter: 4, earnings: 13000}
-];
-
-const data2014 = [
-  {quarter: 1, earnings: 11500},
-  {quarter: 2, earnings: 13250},
-  {quarter: 3, earnings: 20000},
-  {quarter: 4, earnings: 15500}
-];
-
-const data2015 = [
-  {quarter: 1, earnings: 18000},
-  {quarter: 2, earnings: 13250},
-  {quarter: 3, earnings: 15000},
-  {quarter: 4, earnings: 12000}
+const data = [
+  {quarter: 1, earnings: 13000, label: 'q1'},
+  {quarter: 2, earnings: 16500, label: 'q2'},
+  {quarter: 3, earnings: 14250, label: 'q3'},
+  {quarter: 4, earnings: 19000, label: 'q4'}
 ];
 
 class Main extends React.Component {
   render() {
     return (
       <div>
-        <h1>Victory Tutorial</h1>
+        <h1>Start vizualization</h1>
         <VictoryChart
-          domainPadding={10}
-          theme={VictoryTheme.material}
-        >
-          <VictoryAxis
-            tickValues={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
-          />
-          <VictoryAxis
-            dependentAxis
-            tickFormat={(x) => (`$${x / 1000}k`)}
-          />
-          <VictoryStack
-            colorScale={"warm"}
-          >
-            <VictoryBar
-              data={data2012}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2013}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2014}
-              x={"quarter"}
-              y={"earnings"}
-            />
-            <VictoryBar
-              data={data2015}
-              x={"quarter"}
-              y={"earnings"}
-            />
-          </VictoryStack>
-        </VictoryChart>
-      </div>
-    );
+           domainPadding={10}
+         >
+           <VictoryAxis
+             tickValues={["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"]}
+           />
+           <VictoryAxis
+             dependentAxis
+             tickFormat={(x) => (`$${x / 1000}k`)}
+           />
+           <VictoryBar
+             data={data}
+             x={"quarter"}
+             y={"earnings"}
+             style={{
+               data: {fill: "tomato", width: 20}
+              }}
+            labelComponent={
+              <VictoryTooltip
+                cornerRadius={(d) => d.x > 6 ? 0 : 20}
+                pointerLength={(d) => d.y > 0 ? 5 : 20}
+                flyoutStyle={{
+                stroke: (d) => d.x === 10 ?
+                "tomato" : "black"
+                }}
+              />
+            }
+           />
+         </VictoryChart>
+        </div>
+    )
   }
 }
 
 const app = document.getElementById('app');
+
 ReactDOM.render(<Main />, app);
